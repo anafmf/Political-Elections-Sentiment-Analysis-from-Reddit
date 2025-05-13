@@ -367,35 +367,35 @@ st.sidebar.header("Political Parties")
 
 parties = {
     "PS": {
-        "image": "images/ps.jpg",
+        "image": "ps.jpg",
         "url": "https://ps.pt/"
     },
     "AD": {
-        "image": "images/ad.jpg",
+        "image": "ad.jpg",
         "url": "https://ad2025.pt/"
     },
     "IL": {
-        "image": "images/il.jpg",
+        "image": "il.jpg",
         "url": "https://iniciativaliberal.pt/"
     },
     "CHEGA": {
-        "image": "images/chega.jpg",
+        "image": "chega.jpg",
         "url": "https://partidochega.pt/"
     },
     "BE": {
-        "image": "images/be.jpg",
+        "image": "be.jpg",
         "url": "https://www.bloco.org/"
     },
     "Livre": {
-        "image": "images/livre.jpg",
+        "image": "livre.jpg",
         "url": "https://partidolivre.pt/"
     },
     "PAN": {
-        "image": "images/pan.jpg",
+        "image": "pan.jpg",
         "url": "https://www.pan.com.pt/"
     },
     "PCP": {
-        "image": "images/pcp.jpg",
+        "image": "pcp.jpg",
         "url": "https://www.pcp.pt/"
     },
 }
