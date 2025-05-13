@@ -12,6 +12,8 @@ from PIL import Image
 import io
 from datetime import datetime
 
+st.set_page_config(layout="wide") 
+
 container = st.container()
 with container:
     st.title("Public Perception of Political Parties")
