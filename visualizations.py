@@ -1,16 +1,3 @@
-"""
-Visualization data preparation script for the Portuguese Election Sentiment Dashboard.
-
-This script reads processed sentiment data (CSV) and prepares data structures 
-suitable for JavaScript charting libraries (e.g., Chart.js) using only standard Python.
-It expects a CSV file (
-    '/home/ubuntu/comments_with_sentiment.csv'
-) as input, 
-which should be the output of the sentiment_analysis.py script (also refactored).
-
-Functions in this script are called by the Flask backend to get data for JSON endpoints.
-"""
-
 import csv
 import os
 from collections import Counter, defaultdict
@@ -49,74 +36,11 @@ LEADER_COLORS_HEX = {
     "Rui Tavares": "#228B22"
 }
 
-PORTUGUESE_STOPWORDS = set([
-    "de", "a", "o", "que", "e", "do", "da", "em", "um", "para", "com", "não", "uma", "os", "no", "na", "por", "mais",
-    "as", "dos", "como", "mas", "ao", "ele", "das", "à", "seu", "sua", "ou", "quando", "muito", "nos", "já", "eu",
-    "também", "só", "pelo", "pela", "até", "isso", "ela", "entre", "depois", "sem", "mesmo", "aos", "seus", "quem",
-    "nas", "me", "esse", "eles", "você", "essa", "num", "nem", "suas", "meu", "às", "minha", "numa", "pelos",
-    "elas", "qual", "nós", "lhe", "deles", "essas", "esses", "pelas", "este", "dele", "tu", "te", "vocês", "vos",
-    "lhes", "meus", "minhas", "teu", "tua", "teus", "tuas", "nosso", "nossa", "nossos", "nossas", "dela", "delas",
-    "esta", "estes", "estas", "aquele", "aquela", "aqueles", "aquelas", "isto", "aquilo", "estou", "está", "estamos",
-    "estão", "estive", "esteve", "estivemos", "estiveram", "estava", "estávamos", "estavam", "estivera", "estivéramos",
-    "esteja", "estejamos", "estejam", "estivesse", "estivéssemos", "estivessem", "estiver", "estivermos", "estiverem",
-    "hei", "há", "havemos", "hão", "houve", "houvemos", "houveram", "houvera", "houvéramos", "haja", "hajamos",
-    "hajam", "houvesse", "houvéssemos", "houvessem", "houver", "houvermos", "houverem", "houverei", "houverá",
-    "houveremos", "houverão", "houveria", "houveríamos", "houveriam", "sou", "somos", "são", "era", "éramos",
-    "eram", "fui", "foi", "fomos", "foram", "fora", "fôramos", "seja", "sejamos", "sejam", "fosse", "fôssemos",
-    "fossem", "for", "formos", "forem", "serei", "será", "seremos", "serão", "seria", "seríamos", "seriam", "tenho",
-    "tem", "temos", "têm", "tinha", "tínhamos", "tinham", "tive", "teve", "tivemos", "tiveram", "tivera", "tivéramos",
-    "tenha", "tenhamos", "tenham", "tivesse", "tivéssemos", "tivessem", "tiver", "tivermos", "tiverem", "terei", "terá",
-    "teremos", "terão", "teria", "teríamos", "teriam", "ser", "ter", "ir", "vir", "coisa", "etc", "tal", "qualquer",
-    "assim", "então", "porque", "pois", "ainda", "sempre", "nunca", "agora", "hoje", "ontem", "amanhã", "aqui", "ali",
-    "lá", "cá", "sobre", "sob", "ante", "após", "desde", "contra", "durante", "segundo", "mediante", "salvo",
-    "exceto", "fora", "conforme", "enquanto", "logo", "portanto", "contudo", "todavia", "entretanto", "embora",
-    "mesmo", "que", "se", "como", "pra", "pro", "pros", "pras", "q", "tb", "vc", "vcs", "pq", "td", "tbm", "msm", "obg", "p",
-    "r", "k", "kkk", "rs", "lol", "post", "link", "thread", "comment", "reddit", "subreddit", "user", "moderator",
-    "deleted", "removed", "http", "https", "www", "com", "pt", "org", "net", "gov", "br", "youtu", "youtube", "twitter",
-    "facebook", "instagram", "telegram", "whatsapp", "discord", "subreddit", "portugal", "legislativas", "2025",
-    "partido", "partidos", "política", "politica", "eleições", "eleicoes", "votar", "voto", "candidato", "candidatos",
-    "governo", "presidente", "deputado", "deputados", "parlamento", "assembleia", "república", "republica",
-    "acho", "dizer", "disse", "pode", "podes", "puder", "poderia", "posso", "pensa", "pensar", "ver", "quer", "quero",
-    "fazer", "coisas", "coisa", "tipo", "gente", "tudo", "nada", "todos", "todas", "muita", "muitos", "pouco", "poucos",
-    "grande", "pequeno", "bom", "mau", "melhor", "pior", "certo", "errado", "verdade", "mentira", "opinião", "opiniao",
-    "discussão", "discussao", "debate", "tema", "tópico", "topico", "questão", "questao", "problema", "solução", "solucao",
-    "exemplo", "caso", "facto", "fato", "realmente", "apenas", "só", "tambem", "ja", "nao", "sim", "talvez", "claro",
-    "obviamente", "provavelmente", "certeza", "enfim", "aliás", "alias", "além", "alem", "entanto", "portanto", "assim",
-    "então", "entao", "logo", "pois", "mas", "porém", "porem", "contudo", "todavia", "senão", "senao", "ou", "ora",
-    "quer...quer", "seja...seja", "nem...nem", "tanto...quanto", "como...assim", "bem como", "isto é", "isto e", "ou seja",
-    "por exemplo", "a saber", "além disso", "alem disso", "além de", "alem de", "apesar de", "apesar disso", "ainda que",
-    "mesmo que", "embora", "conquanto", "se bem que", "por mais que", "por menos que", "desde que", "contanto que",
-    "a menos que", "salvo se", "caso", "sem que", "para que", "a fim de que", "porque", "que", "pois que", "já que", "ja que",
-    "visto que", "como", "segundo", "conforme", "enquanto", "quando", "logo que", "assim que", "depois que", "antes que",
-    "até que", "ate que", "sempre que", "todas as vezes que", "à medida que", "a medida que", "ao passo que", "à proporção que",
-    "a proporcao que", "quanto mais...mais", "quanto menos...menos", "se", "caso", "contanto que", "salvo se", "desde que",
-    "a menos que", "sem que", "quem", "que", "o qual", "a qual", "os quais", "as quais", "cujo", "cuja", "cujos", "cujas",
-    "onde", "como", "quando", "quanto", "quão", "quao", "ps", "ad", "il", "chega", "be", "pcp", "pan", "livre", "rui", "tavares",
-    "ventura", "montenegro", "mortágua", "mortagua", "raimundo", "sousa", "real", "rocha", "santos", "pedro", "nuno"
-])
-
 # --- Helper Functions ---
 def strip_accents(text):
     if not isinstance(text, str):
         return ""
     return ''.join(c for c in unicodedata.normalize("NFD", text) if unicodedata.category(c) != "Mn")
-
-def clean_text_for_wordcloud(text_list):
-    """Cleans a list of text strings for word cloud generation."""
-    if not isinstance(text_list, list):
-        return []
-    
-    all_words = []
-    for text in text_list:
-        if not text or not isinstance(text, str):
-            continue
-        text_cleaned = strip_accents(text.lower())
-        text_cleaned = re.sub(r"http\S+", "", text_cleaned)  # Remove URLs
-        text_cleaned = re.sub(r"[^a-z\s]", "", text_cleaned) # Remove punctuation, numbers, special chars
-        words = text_cleaned.split()
-        words = [word for word in words if word not in PORTUGUESE_STOPWORDS and len(word) > 2] # Remove stopwords and short words
-        all_words.extend(words)
-    return all_words
 
 def read_csv_data(file_path):
     """Reads data from a CSV file into a list of dictionaries."""
@@ -395,39 +319,6 @@ def get_time_series_party_mentions_data(data_rows, top_n=None):
         })
     
     return {"labels": sorted_dates, "datasets": datasets}
-
-def get_word_cloud_data(data_rows, party_filter=None, top_n=100):
-    """Prepares data for a word cloud (list of [word, frequency] pairs)."""
-    if not data_rows:
-        return []
-
-    texts_for_cloud = []
-    for row in data_rows:
-        text = row.get("texto_comentario")
-        party = row.get("party")
-        if text:
-            if party_filter and party_filter != "Undefined" and party_filter != "overall":
-                if party == party_filter:
-                    texts_for_cloud.append(text)
-            elif not party_filter or party_filter == "overall": # No filter or overall
-                texts_for_cloud.append(text)
-            # Skip if party_filter is "Undefined"
-            elif party_filter == "Undefined":
-                continue 
-    
-    if not texts_for_cloud:
-        if party_filter and party_filter not in ["overall", "Undefined"]:
-            print(f"No comments found for party {party_filter} to generate word cloud data.")
-        return []
-    
-    all_words = clean_text_for_wordcloud(texts_for_cloud)
-    if not all_words:
-        return []
-
-    word_counts = Counter(all_words)
-    word_cloud_data = [[word, count] for word, count in word_counts.most_common(top_n)]
-    
-    return word_cloud_data
 
 trendy_topics = {
     "taxes": [
