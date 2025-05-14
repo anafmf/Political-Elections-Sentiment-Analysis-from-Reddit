@@ -36,7 +36,7 @@ The application is built with Streamlit and visualizes sentiment and discussion 
     ```bash
     pip install -r requirements.txt
     ```
-3. **Run all scripts individually:**
+3. **Run following scripts individually:**
     ```
     python data_processing.py
     ```
