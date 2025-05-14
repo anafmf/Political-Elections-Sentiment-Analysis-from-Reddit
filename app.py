@@ -429,39 +429,3 @@ for i, (name, data) in enumerate(parties.items()):
             # This will open the URL when the button is clicked
             import webbrowser
             webbrowser.open_new_tab(data["url"])
-
-# st.markdown("""
-# <style>
-# .big-font {
-#    font-size:30px !important;
-#    text-align: center;
-# }
-# </style>
-# """, unsafe_allow_html=True)
-
-# st.markdown('<p class="big-font">Public Perception of Political Parties</p>', unsafe_allow_html=True)
-# # st.title("Public Perception of Political Parties")
-# st.markdown(
-#     """ 
-#     Project and Dashboard description:
-#     This is a project that aims to analyze the public perception of political parties in Portugal using Reddit data.
-#     """
-#     )
-
-# tab1, tab2 = st.tabs(["Main", "About"])
-# with tab1:
-#     st.title("Public Perception of Political Parties")
-# with tab2:
-#     st.markdown("This is a project that aims to analyze...")
-
-# col1, col2, col3 = st.columns([1, 3, 1])  # Creates 3 columns with the middle one larger
-
-# # Using the middle column for content
-# with col2:
-#     st.title("Public Perception of Political Parties")
-    
-#     st.markdown("""
-#     ## Project and Dashboard Description
-    
-#     This is a project that aims to analyze the public perception of political parties in Portugal using Reddit data.
-#     """)
