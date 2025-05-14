@@ -19,9 +19,6 @@ with container:
     st.title("Public Perception of Political Parties")
     st.markdown("This is a project that aims to analyze the public perception of political parties in Portugal using Reddit data.")
 
-if st.button("Send Balloons"): 
-    st.balloons()
-
 # data = pd.read_csv("comments_with_sentiment.csv")
 data = visualizations.read_csv_data("comments_with_sentiment.csv")
 # data = csv.DictReader("comments_with_sentiment.csv")
