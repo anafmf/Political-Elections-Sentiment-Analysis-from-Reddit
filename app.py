@@ -16,7 +16,7 @@ st.set_page_config(layout="wide")
 
 container = st.container()
 with container:
-    st.title("Public Perception of Political Parties")
+    st.title("iPolls: A Public Perception of Political Parties")
     st.markdown("This dashboard is part of a project that aims to analyze the public perception of political parties in Portugal using Reddit data.")
 
 # data = pd.read_csv("comments_with_sentiment.csv")
