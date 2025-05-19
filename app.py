@@ -364,7 +364,7 @@ with col2:
 ### Sidebar 
 logo = Image.open("logo.jpg")
 logo = logo.resize((200, 200), Image.LANCZOS)
-st.image(logo, use_container_width=False)
+st.sidebar.image(logo, use_container_width=False)
 st.sidebar.header("Political Parties")
 
 parties = {
