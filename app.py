@@ -362,6 +362,7 @@ with col2:
 
 
 ### Sidebar 
+st.image("logo.jpg", use_container_width=False)
 st.sidebar.header("Political Parties")
 
 parties = {
